@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AURAIQ - Intelligent Shopping Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+html{scroll-behavior:smooth}
+body{background:#070b18;color:#fff;overflow-x:hidden}
+canvas{position:fixed;inset:0;z-index:-2}
+body:before,body:after{content:'';position:fixed;width:420px;height:420px;border-radius:50%;filter:blur(120px);z-index:-1}
+body:before{left:-120px;top:-120px;background:#00d4ff33}
+body:after{right:-120px;bottom:-120px;background:#8b5cf633}
+nav{position:fixed;top:0;width:100%;padding:18px 8%;display:flex;justify-content:space-between;align-items:center;background:rgba(5,10,20,.55);backdrop-filter:blur(14px);z-index:10}
+.logo{font-size:30px;font-weight:800;background:linear-gradient(90deg,#39d0ff,#7c5cff);-webkit-background-clip:text;color:transparent}
+nav a{color:#fff;text-decoration:none;margin-left:22px}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;align-items:center;min-height:100vh;padding:0 8%;gap:40px}
+.hero h1{font-size:72px;line-height:1.05}
+.hero span{background:linear-gradient(90deg,#39d0ff,#8b5cf6,#22d3ee);-webkit-background-clip:text;color:transparent}
+.hero p{margin:25px 0;color:#cbd5e1;line-height:1.8}
+.btn{display:inline-block;padding:14px 28px;border-radius:40px;background:linear-gradient(90deg,#06b6d4,#2563eb);text-decoration:none;color:#fff;margin:8px;transition:.35s}
+.btn:hover{transform:translateY(-5px);box-shadow:0 0 25px #38bdf8}
+.hero img{width:100%;height:620px;object-fit:cover;border-radius:24px;box-shadow:0 25px 70px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12)}
+section{padding:90px 8%}
+.title{text-align:center;font-size:40px;margin-bottom:45px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:24px;border-radius:20px;transition:.4s}
+.card:hover{transform:translateY(-10px)}
+.card img{width:100%;height:180px;object-fit:cover;border-radius:15px;margin-bottom:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px}
+.stat{background:#101827;padding:28px;border-radius:18px;text-align:center}
+.stat h2{font-size:38px;color:#38bdf8}
+.table{overflow:auto}
+table{width:100%;border-collapse:collapse;background:#111827}
+th,td{padding:14px;border-bottom:1px solid #2d3748;text-align:center}
+th{background:#1f2937}
+.timeline{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.step{background:#111827;padding:15px 20px;border-radius:12px}
+.notice{background:linear-gradient(90deg,#0ea5e9,#7c3aed);padding:18px;border-radius:16px;margin:15px 0}
+.reveal{opacity:0;transform:translateY(40px);transition:1s}
+.reveal.show{opacity:1;transform:none}
+footer{text-align:center;padding:40px;background:#0b1120}
+.parallax{background:url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1600&q=80') center/cover fixed;height:320px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:700}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:120px}.hero h1{font-size:48px}}
+
+/* === Premium Effects === */
+.hero img{
+animation:heroZoom 12s ease-in-out infinite alternate !important;
+transform-origin:center;
+}
+@keyframes heroZoom{
+0%{transform:scale(1) rotate(0deg)}
+100%{transform:scale(1.08) rotate(.4deg)}
+}
+.card{
+backdrop-filter:blur(14px);
+position:relative;
+overflow:hidden;
+}
+.card::before{
+content:"";
+position:absolute;
+top:-120%;
+left:-120%;
+width:250%;
+height:250%;
+background:linear-gradient(45deg,transparent,rgba(255,255,255,.08),transparent);
+transform:rotate(25deg);
+transition:1s;
+}
+.card:hover::before{top:100%;left:100%}
+.card:hover{
+transform:translateY(-14px) rotateX(8deg) rotateY(-6deg) scale(1.03)!important;
+box-shadow:0 25px 60px rgba(0,212,255,.35);
+}
+.btn{
+position:relative;
+overflow:hidden;
+}
+.btn::after{
+content:"";
+position:absolute;
+top:0;
+left:-120%;
+width:60%;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+transform:skewX(-25deg);
+}
+.btn:hover::after{
+left:180%;
+transition:1s;
+}
+.logo{
+text-shadow:0 0 20px rgba(0,212,255,.5);
+}
+
+
+/* ===== Modern Premium Effects ===== */
+.hero{
+position:relative;
+}
+.hero::before{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 20% 30%,rgba(0,212,255,.18),transparent 35%),
+radial-gradient(circle at 80% 20%,rgba(139,92,246,.18),transparent 30%);
+pointer-events:none;
+}
+.hero img{
+animation:floatZoom 10s ease-in-out infinite alternate !important;
+}
+@keyframes floatZoom{
+0%{transform:perspective(1200px) rotateY(-3deg) scale(1)}
+100%{transform:perspective(1200px) rotateY(3deg) scale(1.08)}
+}
+nav{
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+section{
+position:relative;
+}
+.title{
+background:linear-gradient(90deg,#fff,#7dd3fc,#c4b5fd);
+-webkit-background-clip:text;
+color:transparent;
+}
+.card{
+transition:.5s cubic-bezier(.2,.8,.2,1);
+}
+.card:hover{
+box-shadow:0 30px 70px rgba(0,212,255,.25),0 0 30px rgba(139,92,246,.15)!important;
+}
+.floating-blob{
+position:fixed;
+width:180px;
+height:180px;
+border-radius:50%;
+background:linear-gradient(135deg,#22d3ee33,#8b5cf633);
+filter:blur(30px);
+animation:blob 12s ease-in-out infinite;
+pointer-events:none;
+z-index:-1;
+}
+.floating-blob:nth-child(2){
+right:5%;
+top:60%;
+animation-delay:-6s;
+}
+@keyframes blob{
+0%,100%{transform:translateY(0) scale(1)}
+50%{transform:translateY(-40px) scale(1.15)}
+}
+
+
+/* === Extra Immersive Effects === */
+.welcome-popup{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.8);background:rgba(17,24,39,.9);backdrop-filter:blur(16px);padding:28px 34px;border:1px solid rgba(255,255,255,.12);border-radius:22px;z-index:9999;text-align:center;opacity:0;transition:.5s}
+.welcome-popup.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.welcome-popup button{margin-top:15px;padding:12px 22px;border:none;border-radius:30px;background:linear-gradient(90deg,#06b6d4,#2563eb);color:#fff;cursor:pointer}
+.toast{position:fixed;right:20px;top:90px;background:rgba(17,24,39,.95);padding:16px 18px;border-left:4px solid #22d3ee;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);animation:slideToast 9s infinite;z-index:999}
+@keyframes slideToast{0%,20%{transform:translateX(130%)}30%,70%{transform:none}100%{transform:translateX(130%)}}
+.brand-slider{overflow:hidden;background:#0f172a;padding:18px 0;margin:50px 0}
+.brand-track{display:flex;gap:70px;white-space:nowrap;animation:scrollBrand 18s linear infinite;font-weight:700;font-size:24px;color:#7dd3fc}
+@keyframes scrollBrand{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ai-status{font-size:18px;color:#7dd3fc;height:28px}
+</style>
+</head>
+<body>
+<div class='floating-blob'></div><div class='floating-blob'></div>
+
+<script>
+  window.wxOConfiguration = {
+    orchestrationID: "e538d92f803b4c49bebbb5453e51f629_97a979b4-540d-4a70-ae73-3292cfb767a4",
+    hostURL: "https://au-syd.watson-orchestrate.cloud.ibm.com",
+    rootElementID: "root",
+    deploymentPlatform: "ibmcloud",
+    crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/e538d92f803b4c49bebbb5453e51f629:97a979b4-540d-4a70-ae73-3292cfb767a4::",
+    chatOptions: {
+      agentId: "be33ced5-9071-453d-b7de-87328e6b2113",
+    }
+  };
+
+  setTimeout(function () {
+    const script = document.createElement('script');
+    script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+    script.addEventListener('load', function () {
+      wxoLoader.init();
+    });
+    document.head.appendChild(script);
+  }, 0);
+</script>
+
+
+<div class="welcome-popup" id="welcome">
+<h2>✨ Welcome to AURAIQ</h2>
+<p>Your AI Shopping Companion is ready.</p>
+<div class="ai-status" id="typing"></div>
+<button onclick="document.getElementById('welcome').classList.remove('show')">Start Shopping</button>
+</div>
+
+<div class="toast">🔔 Price Drop Alert<br><small>Nike Air Max ↓18% today</small></div>
+
+<canvas id="bg"></canvas>
+<nav><div class="logo">🛍️ AURAIQ</div><div><a href="#features">Features</a><a href="#dashboard">Dashboard</a><a href="#workflow">Workflow</a></div></nav>
+
+<section class="hero">
+<div>
+<h1><span>Intelligent</span><br>Shopping Agent</h1>
+<p>AI shopping companion using IBM LangFlow, IBM Orchestrate and IBM Models to compare products, analyze reviews, predict prices and personalize recommendations.</p>
+<a class="btn">Launch AI</a><a class="btn">Voice Search</a>
+</div>
+<img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1400&q=80">
+</section>
+
+<section class="reveal" id="features">
+<h2 class="title">Core AI Capabilities</h2>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800"><h3>Multi-source Comparison</h3><p>Amazon, Flipkart, Myntra, Ajio and more.</p></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800"><h3>Price Prediction</h3><p>Predict discounts and buying windows.</p></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800"><h3>AI Review Analysis</h3><p>Summarize reviews and detect fake feedback.</p></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?auto=format&fit=crop&w=800"><h3>Sustainability</h3><p>Eco score and greener alternatives.</p></div>
+</div>
+</section>
+
+<section class="reveal">
+<h2 class="title">AI Review Aggregation</h2>
+<div class="grid">
+<div class="card"><h3>⭐ Overall Rating 4.7/5</h3><p>Amazon 4.6 • Flipkart 4.5 • Myntra 4.8</p><div class="notice">AI Summary: Comfortable, durable, value for money, fast delivery.</div></div>
+<div class="card"><h3>🛡 Fake Review Detector</h3><p>Trust Score <b>96%</b></p><p>✔ Genuine review detected using IBM AI.</p></div>
+</div>
+</section>
+
+<section class="reveal">
+<h2 class="title">Personalized Shopping</h2>
+<div class="grid">
+<div class="card"><h3>Your Preferences</h3><p>Budget • Brand • Color • Size • Sustainability</p></div>
+<div class="card"><h3>AI Shopping Companion</h3><p>"Best deal found. Wait 5 days for 15% price drop."</p></div>
+<div class="card"><h3>Smart Alternatives</h3><p>Nike → Adidas → Puma → Reebok</p></div>
+<div class="card"><h3>Wishlist</h3><p>Shoes • Laptop • Watch • Jacket</p></div>
+</div>
+</section>
+
+<section class="reveal" id="dashboard">
+<h2 class="title">Smart Shopping Pulse</h2>
+<div class="stats">
+<div class="stat"><h2>25K+</h2><p>Products</p></div>
+<div class="stat"><h2>3.2M</h2><p>Reviews</p></div>
+<div class="stat"><h2>18K</h2><p>Fake Reviews Flagged</p></div>
+<div class="stat"><h2>₹4.5L</h2><p>User Savings</p></div>
+<div class="stat"><h2>92%</h2><p>Eco Score</p></div>
+</div>
+</section>
+
+<section class="reveal"><div class="parallax">Shop Smarter with AI</div></section>
+
+<section class="reveal">
+<h2 class="title">Product Comparison</h2>
+<div class="table">
+<table><tr><th>Product</th><th>Amazon</th><th>Flipkart</th><th>Rating</th><th>AI Choice</th></tr>
+<tr><td>Nike Shoes</td><td>₹6499</td><td>₹6299</td><td>4.8★</td><td>Flipkart</td></tr>
+<tr><td>Headphones</td><td>₹2999</td><td>₹2899</td><td>4.7★</td><td>Amazon</td></tr>
+</table></div>
+</section>
+
+<section class="reveal" id="workflow">
+<h2 class="title">IBM AI Workflow</h2>
+<div class="timeline">
+<div class="step">Voice/Image/Text</div>
+<div class="step">IBM LangFlow</div>
+<div class="step">IBM Orchestrate</div>
+<div class="step">IBM Models</div>
+<div class="step">AI Reasoning</div>
+<div class="step">Price Prediction</div>
+<div class="step">Recommendations</div>
+</div>
+</section>
+
+
+<section class="brand-slider">
+<div class="brand-track">
+<span>Amazon</span><span>Flipkart</span><span>Myntra</span><span>Ajio</span><span>Nykaa</span><span>Puma</span><span>Nike</span><span>Apple</span>
+<span>Amazon</span><span>Flipkart</span><span>Myntra</span><span>Ajio</span><span>Nykaa</span><span>Puma</span><span>Nike</span><span>Apple</span>
+</div>
+</section>
+
+<footer>Powered by IBM LangFlow • IBM Orchestrate • IBM Models</footer>
+
+<script>
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('show')}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
+const c=document.getElementById('bg'),ctx=c.getContext('2d');
+function r(){c.width=innerWidth;c.height=innerHeight}r();onresize=r;
+let pts=[...Array(90)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,v:Math.random()+.2}));
+(function anim(){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle="#40d9ff";pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.28);ctx.fill();p.y-=p.v;if(p.y<0)p.y=c.height;});requestAnimationFrame(anim)})();
+</script>
+
+<script>
+// Mouse glow
+const glow=document.createElement('div');
+glow.style.cssText='position:fixed;width:220px;height:220px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(0,212,255,.18),transparent 70%);filter:blur(25px);transform:translate(-50%,-50%)';
+document.body.appendChild(glow);
+document.addEventListener('mousemove',e=>{
+ glow.style.left=e.clientX+'px';
+ glow.style.top=e.clientY+'px';
+});
+
+// 3D tilt cards
+document.querySelectorAll('.card').forEach(card=>{
+ card.addEventListener('mousemove',e=>{
+   const r=card.getBoundingClientRect();
+   const x=(e.clientX-r.left)/r.width-.5;
+   const y=(e.clientY-r.top)/r.height-.5;
+   card.style.transform=`perspective(900px) rotateY(${x*12}deg) rotateX(${-y*12}deg) scale(1.03)`;
+ });
+ card.addEventListener('mouseleave',()=>card.style.transform='');
+});
+</script>
+
+
+<script>
+// Parallax hero image
+window.addEventListener('scroll',()=>{
+ const img=document.querySelector('.hero img');
+ if(img){
+   img.style.transform=`translateY(${window.scrollY*0.08}px) scale(${1+window.scrollY*0.00008})`;
+ }
+});
+
+// Magnetic buttons
+document.querySelectorAll('.btn').forEach(btn=>{
+ btn.addEventListener('mousemove',e=>{
+   const r=btn.getBoundingClientRect();
+   const x=e.clientX-r.left-r.width/2;
+   const y=e.clientY-r.top-r.height/2;
+   btn.style.transform=`translate(${x*0.08}px,${y*0.08}px)`;
+ });
+ btn.addEventListener('mouseleave',()=>btn.style.transform='');
+});
+</script>
+
+
+<script>
+setTimeout(()=>document.getElementById('welcome').classList.add('show'),700);
+const msgs=["Analyzing products...","Comparing prices...","Checking reviews...","Finding best deal..."];
+let i=0,j=0,el=document.getElementById('typing');
+function type(){
+ const t=msgs[i];
+ el.textContent=t.slice(0,j++);
+ if(j<=t.length){setTimeout(type,55);}
+ else{setTimeout(()=>{j=0;i=(i+1)%msgs.length;type();},1200);}
+}
+type();
+</script>
+</body>
+</html>
